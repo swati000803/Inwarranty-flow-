@@ -1,7 +1,7 @@
 name: Postman collection workflow
 
 on:
- push
+ push:
   branches:[main]
  workflow_dispatch:
  schedule:
