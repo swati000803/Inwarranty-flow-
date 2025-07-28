@@ -36,11 +36,22 @@ jobs:
            -r cli,htmlextra 
 
     - name: New Report
-      if: always()
+      if: always()  # ensuer that archive execute rrespective wheter the previouse step has pass or not!
       uses: actions/upload-artifact@v4.6.2
       with:
         name: Newman Report
         path: newman/*.html
+
+    - name: Creating github page branch
+      if : always()
+      uses: peaceiris/actions-gh-pages@v4.0.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: newman/
+        
+        
+      
+        
     
     
       
