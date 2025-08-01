@@ -34,7 +34,7 @@ jobs:
            -e QA.postman_environment.json \
            -d Testdata.csv \
            -r cli,htmlextra \
-           --r reporter-htmlextra-export ./nexwman/index.html
+           --reporter-htmlextra-export ./nexwman/index.html
 
     - name: New Report
       if: always()  # ensuer that archive execute rrespective wheter the previouse step has pass or not!
