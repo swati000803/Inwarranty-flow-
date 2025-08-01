@@ -5,9 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    #- cron : 30 02 * * *
-    #- cron : 00 14 * * *
-    #- cron  : 00 06 * * 1-5
+    - cron : 30 02 * * *
+    - cron : 00 14 * * *
+    - cron  : 00 06 * * 1-5
     
 jobs:
   run-postman-tests:
@@ -33,7 +33,8 @@ jobs:
            newman run 'Inwarranty-flow collection.postman_collection.json' \
            -e QA.postman_environment.json \
            -d Testdata.csv \
-           -r cli,htmlextra 
+           -r cli,htmlextra \
+           --r reporter-htmlextra-export ./nexwman/index.html
 
     - name: New Report
       if: always()  # ensuer that archive execute rrespective wheter the previouse step has pass or not!
