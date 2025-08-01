@@ -1,0 +1,51 @@
+name: Postman collection workflow
+
+on:  
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron : 30 02 * * *
+    - cron : 00 14 * * *
+    - cron  : 00 06 * * 1-5
+    
+jobs:
+  run-postman-tests:
+   runs-on: ubuntu-latest
+
+   steps:
+    
+    - name: Checkout the code
+      uses: actions/checkout@v4.2.2
+
+    - name: install nodejs and npm
+      uses: actions/setup-node@v3.9.1
+      with:
+       node-version: '22'
+
+    - name: install newman and Html-extra globally
+      run: |
+           npm install -g newman
+           npm install -g newman-reporter-htmlextra
+
+    - name: Run the postman collection with newman
+      run: |
+           newman run 'Inwarranty-flow collection.postman_collection.json' \
+           -e QA.postman_environment.json \
+           -d Testdata.csv \
+           -r cli,htmlextra \
+           --reporter-htmlextra-export ./nexwman/index.html
+
+    - name: New Report
+      if: always()  # ensuer that archive execute rrespective wheter the previouse step has pass or not!
+      uses: actions/upload-artifact@v4.6.2
+      with:
+        name: Newman Report
+        path: newman/*.html
+
+    - name: Creating github page branch
+      if : always()
+      uses: peaceiris/actions-gh-pages@v4.0.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: newman/
